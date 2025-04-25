@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+:root {
+  /* --background: #ffffff;
+  --foreground: #171717; */
+
+  --chupa:#D9263BE5;
+  --yellow-chupa:#FFF200;
+}
+
+@theme inline {
+  --color-chupa-500: var(--chupa);
+  --color-yellow-chupa: var(--yellow-chupa);
+
+  /* --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono); */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* --background: #0a0a0a;
+    --foreground: #ededed; */
+  }
+}
+
+body {
+  /* background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif; */
+  background-image: url("/bgs/desktop-bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* background-attachment: fixed; */
+  height: 100vh;
+  color: #fff;
+}
+
+@media (max-width: 767px) {
+  body {
+    height: 100svh;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Remove autocomplete styling for all browsers */
+
+/* For WebKit-based browsers (Chrome, Safari, Opera) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  /* Override the background color */
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+
+  /* Override the text color if needed */
+  -webkit-text-fill-color: var(--chupa) !important;
+
+  /* Transition to delay the autofill styling */
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* For Firefox */
+input:autofill,
+input:autofill:hover,
+input:autofill:focus,
+input:autofill:active {
+  /* Remove background color */
+  box-shadow: 0 0 0 30px white inset !important;
+  
+  /* Force the text color */
+  color: var(--chupa) !important;
+}
+
+/* If you want to force your own styling instead */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+input:autofill,
+input:autofill:hover,
+input:autofill:focus,
+input:autofill:active {
+  /* You can customize these to match your design */
+  background-color: white !important; /* Or any color you want */
+  color: var(--chupa) !important;
+  border: 2px solid var(--chupa) !important;
+  -webkit-text-fill-color: var(--chupa) !important; /* or any color you want */
+  transition: background-color 9999s ease-in-out 0s; /* Prevent yellow bg */
+}
