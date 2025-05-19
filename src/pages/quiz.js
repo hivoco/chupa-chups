@@ -3,9 +3,10 @@ import React, { useEffect, useState } from "react";
 import Login from "./login";
 import Result from "@/components/result";
 import { motion } from "framer-motion";
+import { playClickSound } from "@/utlis/playClickSound";
 
 const Quiz = () => {
-  const [optionSelected, setOptionSelected] = useState(""); 
+  const [optionSelected, setOptionSelected] = useState("");
   const [startClicked, setStartClicked] = useState(false);
   const [submitClicked, setSubmitClicked] = useState(false);
   const [data, setData] = useState();
@@ -25,14 +26,13 @@ const Quiz = () => {
     },
   ];
 
+  const handleSubmit = () => {
+    setSubmitClicked(true); // remove when api og is added
+    return; // remove when api og is added
 
-  const handleSubmit=()=>{
-    setSubmitClicked(true);      // remove when api og is added  
-    return;       // remove when api og is added
-
-    if(!optionSelected) return
-    sendData(data)
-  }
+    if (!optionSelected) return;
+    sendData(data);
+  };
 
   async function sendData(data) {
     const END_POINT = "http://192.168.1.10:5000";
@@ -45,7 +45,7 @@ const Quiz = () => {
 
       const result = await res.json();
       if (result.message) {
-        setSubmitClicked(true);        
+        setSubmitClicked(true);
       }
       console.log(result);
     } catch (err) {
@@ -53,17 +53,17 @@ const Quiz = () => {
     }
   }
 
-    useEffect(() => {
-      const mail = sessionStorage.getItem("user_email");
-      if(!mail) return
-      if (optionSelected) {
-        setData({
-          user_email: mail,
-          is_correct: optionSelected === "B",
-        });
-      }
-    }, [optionSelected]);
-  
+  useEffect(() => {
+    const mail = sessionStorage.getItem("user_email");
+    if (!mail) return;
+    if (optionSelected) {
+      setData({
+        user_email: mail,
+        is_correct: optionSelected === "B",
+      });
+    }
+  }, [optionSelected]);
+
   return (
     // flex flex-col items-center justify-between
     //    grid gap-7.5 justify-items-center
@@ -91,10 +91,12 @@ const Quiz = () => {
           style={{
             boxShadow: "3.69px 3.69px 3.69px 0px #FFF20080",
           }}
-          onClick={() => setStartClicked(true)}
+          onClick={() => {
+            setStartClicked(true);
+            playClickSound();
+          }}
           className=" bg-chupa-500 rounded-full h-50 w-50  md:h-45 md:w-45 flex justify-center items-center absolute left-1/2 -translate-x-1/2  top-1/2 
         -translate-y-1/2 hover:outline-1 hover:outline-yellow-chupa"
-        
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{
@@ -197,7 +199,10 @@ const Quiz = () => {
             // className="w-32 h-32 bg-blue-500"
           >
             <button
-              onClick={handleSubmit}
+              onClick={() => {
+                handleSubmit();
+                playClickSound();
+              }}
               className="  max-h-16.25 h-12 w-fit self-center  border-b-4 border-b-chupa-500 md:border-transparent bg-yellow-chupa uppercase text-chupa-500 py-3 px-23 rounded-xl 
           font-bold text-base leading-[100%] tracking-normal transition-all  duration-200 hover:border-b-4 hover:border-b-chupa-500"
             >

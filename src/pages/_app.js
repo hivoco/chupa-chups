@@ -1,11 +1,15 @@
 import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 import Head from "next/head";
+// import { useEffect, useRef } from "react";
+import { GoogleAnalytics } from "@next/third-parties/google";
+
 
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
 });
+
 
 export default function App({ Component, pageProps }) {
   return (
@@ -18,6 +22,8 @@ export default function App({ Component, pageProps }) {
       </Head>
 
       <Component {...pageProps} />
+      <audio id="click-sound" src="/audio/click.mp3"  />
+      <GoogleAnalytics gaId="G-7B50G65ENZ" />
     </main>
   );
 }

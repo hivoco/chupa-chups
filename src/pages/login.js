@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { playClickSound } from "@/utlis/playClickSound";
 
 
 const Login = () => {
@@ -14,10 +15,16 @@ const Login = () => {
     is_accepted: false,
   });
 
-  console.log(userDetails, "userDetails");
+  // console.log(userDetails, "userDetails");
 
   function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    // return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    // RFC 5322 compliant regex pattern for email validation
+    const pattern =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+    console.log(pattern.test(email), "mail check");
+    return pattern.test(email);
   }
 
   function isValidPhone(phone) {
@@ -34,8 +41,22 @@ const Login = () => {
   }
 
   async function sendData(data) {
-    router.push("/quiz"); // remove later
-    return; // remove later
+    if (!isValidData(data)) {
+      return;
+      //remove later on
+    }
+
+    if (
+      userDetails.name &&
+      userDetails.user_email &&
+      userDetails.phone_number &&
+      userDetails.is_accepted
+    ) {
+      router.push("/quiz"); // remove later
+      return; // remove if block when adding prod api
+    }
+    return;
+
     const END_POINT = "http://192.168.1.10:5000";
     if (!isValidData(data)) {
       console.log("Invalid data");
@@ -91,11 +112,12 @@ const Login = () => {
       <motion.div
         initial={{ y: "30vh", opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 20, duration: 3, delay: 1}}
+        transition={{ type: "spring", stiffness: 20, duration: 3, delay: 1 }}
       >
         <div className="w-full  relative z-10 flex flex-col gap-3 font-normal text-sm leading-[100%] tracking-normal">
           <div className="w-full ">
             <input
+              spellCheck={true}
               type="text"
               autoComplete="off"
               inputMode="text"
@@ -132,8 +154,12 @@ const Login = () => {
                 })
               }
               value={userDetails.user_email}
-              className={`w-full min-h-12 p-4 py-3.5 text-center  bg-chupa-500 border-b-3 border-b-yellow-chupa rounded-full shadow-lg placeholder-white  outline-none 
-                ${ userDetails.user_email? "text-chupa-500 bg-white font-semibold ring-2 border-none ring-chupa-500": "text-white"}
+              className={`w-full min-h-12 p-4 py-3.5 text-center  bg-chupa-500 border-b-3 border-b-yellow-chupa rounded-full shadow-lg placeholder-white  outline-none  
+                ${
+                  userDetails.user_email
+                    ? "text-chupa-500 bg-white font-semibold ring-2 border-none ring-chupa-500"
+                    : "text-white"
+                }
               `}
             />
           </div>
@@ -171,8 +197,7 @@ const Login = () => {
       <motion.div
         initial={{ y: "100vh" }}
         animate={{ y: 0 }}
-        
-        transition={{ type: "spring", stiffness: 20, duration: 1, delay: 1.5  }}
+        transition={{ type: "spring", stiffness: 20, duration: 1, delay: 1.5 }}
       >
         <div className="grid gap-7 w-full min-w-68 ">
           <div
@@ -196,7 +221,10 @@ const Login = () => {
           </div>
 
           <button
-            onClick={() => sendData(userDetails)}
+            onClick={() => {
+              sendData(userDetails);
+              playClickSound();
+            }}
             className="w-full cursor-pointer max-h-16.25 h-12  border-b-4 border-b-chupa-500 md:border-transparent bg-yellow-chupa uppercase text-chupa-500 py-3 rounded-xl 
           font-bold text-base leading-[100%] tracking-normal transition-all  duration-200 hover:border-b-4 hover:border-b-chupa-500"
           >
