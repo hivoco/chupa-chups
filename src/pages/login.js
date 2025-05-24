@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { playClickSound } from "@/utlis/playClickSound";
 
-
 const Login = () => {
   const router = useRouter();
   const [userDetails, setUserDetails] = useState({
@@ -46,18 +45,18 @@ const Login = () => {
       //remove later on
     }
 
-    if (
-      userDetails.name &&
-      userDetails.user_email &&
-      userDetails.phone_number &&
-      userDetails.is_accepted
-    ) {
-      router.push("/quiz"); // remove later
-      return; // remove if block when adding prod api
-    }
-    return;
+    // if (
+    //   userDetails.name &&
+    //   userDetails.user_email &&
+    //   userDetails.phone_number &&
+    //   userDetails.is_accepted
+    // ) {
+    //   router.push("/quiz"); // remove later
+    //   return; // remove if block when adding prod api
+    // }
+    // return;
 
-    const END_POINT = "http://192.168.1.10:5000";
+    const END_POINT = "http://api.chupachups.in";
     if (!isValidData(data)) {
       console.log("Invalid data");
       return;
