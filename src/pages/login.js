@@ -42,21 +42,9 @@ const Login = () => {
   async function sendData(data) {
     if (!isValidData(data)) {
       return;
-      //remove later on
     }
 
-    // if (
-    //   userDetails.name &&
-    //   userDetails.user_email &&
-    //   userDetails.phone_number &&
-    //   userDetails.is_accepted
-    // ) {
-    //   router.push("/quiz"); // remove later
-    //   return; // remove if block when adding prod api
-    // }
-    // return;
-
-    const END_POINT = "http://api.chupachups.in";
+    const END_POINT = "https://api.chupachups.in";
     if (!isValidData(data)) {
       console.log("Invalid data");
       return;
