@@ -4,6 +4,7 @@ import Login from "./login";
 import Result from "@/components/result";
 import { motion } from "framer-motion";
 import { playClickSound } from "@/utlis/playClickSound";
+import { trackButtonClick } from "@/utlis/gtag";
 
 const Quiz = () => {
   const [optionSelected, setOptionSelected] = useState("");
@@ -91,8 +92,9 @@ const Quiz = () => {
             boxShadow: "3.69px 3.69px 3.69px 0px #FFF20080",
           }}
           onClick={() => {
-            setStartClicked(true);
+            trackButtonClick("Game Start Screen", "Start Button");
             playClickSound();
+            setStartClicked(true);
           }}
           className=" bg-chupa-500 rounded-full h-50 w-50  md:h-45 md:w-45 flex justify-center items-center absolute left-1/2 -translate-x-1/2  top-1/2 
         -translate-y-1/2 hover:outline-1 hover:outline-yellow-chupa"
@@ -199,8 +201,9 @@ const Quiz = () => {
           >
             <button
               onClick={() => {
-                handleSubmit();
+                trackButtonClick("Quiz Screen", "Submit Button");
                 playClickSound();
+                handleSubmit();
               }}
               className="  max-h-16.25 h-12 w-fit self-center  border-b-4 border-b-chupa-500 md:border-transparent bg-yellow-chupa uppercase text-chupa-500 py-3 px-23 rounded-xl 
           font-bold text-base leading-[100%] tracking-normal transition-all  duration-200 hover:border-b-4 hover:border-b-chupa-500"
