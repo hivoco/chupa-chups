@@ -4,7 +4,7 @@ import Login from "./login";
 import Result from "@/components/result";
 import { motion } from "framer-motion";
 import { playClickSound } from "@/utlis/playClickSound";
-import { trackButtonClick } from "@/utlis/gtag";
+import { trackEvent } from "@/utlis/analytics";
 
 const Quiz = () => {
   const [optionSelected, setOptionSelected] = useState("");
@@ -92,7 +92,7 @@ const Quiz = () => {
             boxShadow: "3.69px 3.69px 3.69px 0px #FFF20080",
           }}
           onClick={() => {
-            trackButtonClick("Game Start Screen", "Start Button");
+            trackEvent("click", "Game Start Screen", "Start Button");
             playClickSound();
             setStartClicked(true);
           }}
@@ -201,7 +201,7 @@ const Quiz = () => {
           >
             <button
               onClick={() => {
-                trackButtonClick("Quiz Screen", "Submit Button");
+                trackEvent("click", "Quiz Screen", "Submit Button");
                 playClickSound();
                 handleSubmit();
               }}

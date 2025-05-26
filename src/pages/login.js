@@ -4,10 +4,10 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { playClickSound } from "@/utlis/playClickSound";
-import { trackButtonClick } from "@/utlis/gtag";
+import { trackEvent } from "@/utlis/analytics";
+
 
 const Login = () => {
- 
   const router = useRouter();
   const [userDetails, setUserDetails] = useState({
     name: "",
@@ -45,7 +45,8 @@ const Login = () => {
     if (!isValidData(data)) {
       return;
     }
-    trackButtonClick("FPD Screen", "Login Button");
+    trackEvent("click", "FPD screen", "Login Button");
+
 
     const END_POINT = "https://api.chupachups.in";
     if (!isValidData(data)) {
