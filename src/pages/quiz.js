@@ -28,14 +28,13 @@ const Quiz = () => {
 
   const handleSubmit = () => {
     setSubmitClicked(true); // remove when api og is added
-    return; // remove when api og is added
 
     if (!optionSelected) return;
     sendData(data);
   };
 
   async function sendData(data) {
-    const END_POINT = "http://192.168.1.10:5000";
+    const END_POINT = "https://api.chupachups.in";
     try {
       const res = await fetch(`${END_POINT}/api/update_data`, {
         method: "POST",
