@@ -4,7 +4,7 @@ import Login from "./login";
 import Result from "@/components/result";
 import { motion } from "framer-motion";
 import { playClickSound } from "@/utlis/playClickSound";
-import { trackEvent } from "@/utlis/analytics";
+import { trackEvent, trackEventDataLayer } from "@/utlis/analytics";
 
 const Quiz = () => {
   const [optionSelected, setOptionSelected] = useState("");
@@ -28,9 +28,23 @@ const Quiz = () => {
   ];
 
   const handleSubmit = () => {
-    setSubmitClicked(true); // remove when api og is added
+    if (!optionSelected) {
+      console.log("No option selected - not submitting");
+      return;
+    }
 
-    if (!optionSelected) return;
+    // Track the submit event BEFORE making API call
+    console.log("Tracking submit button click");
+    trackEventDataLayer("click", "Quiz Screen", "Submit Button");
+    trackEvent("click", "Quiz Screen", "Submit Button");
+
+    // Also track which option was selected
+    trackEventDataLayer(
+      "quiz_answer",
+      "Quiz Screen",
+      `Option ${optionSelected} Selected`
+    );
+
     sendData(data);
   };
 
@@ -46,12 +60,43 @@ const Quiz = () => {
       const result = await res.json();
       if (result.message) {
         setSubmitClicked(true);
+        // Track successful quiz submission
+        trackEventDataLayer("success", "Quiz Screen", "Quiz Submit Success");
+        trackEventDataLayer(
+          "quiz_result",
+          "Quiz Screen",
+          data.is_correct ? "Correct Answer" : "Wrong Answer"
+        );
       }
       console.log(result);
     } catch (err) {
       console.error("Error:", err);
+      // Track submission error
+      trackEventDataLayer("error", "Quiz Screen", "Quiz Submit Error");
     }
   }
+
+  const handleStartClick = () => {
+    console.log("Tracking start button click");
+    // Track start button event with both methods
+    trackEventDataLayer("click", "Game Start Screen", "Start Button");
+    trackEvent("click", "Game Start Screen", "Start Button");
+
+    playClickSound();
+    setStartClicked(true);
+  };
+
+  const handleOptionSelect = (cardId) => {
+    setOptionSelected(cardId);
+
+    // Track option selection
+    console.log("Tracking option selection:", cardId);
+    trackEventDataLayer(
+      "quiz_option_select",
+      "Quiz Screen",
+      `Option ${cardId} Selected`
+    );
+  };
 
   useEffect(() => {
     const mail = sessionStorage.getItem("user_email");
@@ -65,9 +110,6 @@ const Quiz = () => {
   }, [optionSelected]);
 
   return (
-    // flex flex-col items-center justify-between
-    //    grid gap-7.5 justify-items-center
-    // <div className="pt-11  h-screen  flex  items-center justifybetween  flex-col gap-18 relative">
     <div
       className=" py-11 h-svh overflow-hidden  md:h-screen max-w-4xl  mx-auto
     flex flex-col 
@@ -91,13 +133,9 @@ const Quiz = () => {
           style={{
             boxShadow: "3.69px 3.69px 3.69px 0px #FFF20080",
           }}
-          onClick={() => {
-            trackEvent("click", "Game Start Screen", "Start Button");
-            playClickSound();
-            setStartClicked(true);
-          }}
+          onClick={handleStartClick}
           className=" bg-chupa-500 rounded-full h-50 w-50  md:h-45 md:w-45 flex justify-center items-center absolute left-1/2 -translate-x-1/2  top-1/2 
-        -translate-y-1/2 hover:outline-1 hover:outline-yellow-chupa"
+        -translate-y-1/2 hover:outline-1 hover:outline-yellow-chupa cursor-pointer"
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{
@@ -114,14 +152,6 @@ const Quiz = () => {
             opacity: { duration: 0.8 },
           }}
         >
-          {/* <div
-            style={{
-              boxShadow: "3.69px 3.69px 3.69px 0px #FFF20080",
-            }}
-            onClick={() => setStartClicked(true)}
-            className=" bg-chupa-500 rounded-full h-50 w-50  md:h-45 md:w-45 flex justify-center items-center absolute left-1/2 -translate-x-1/2  top-1/2 
-            -translate-y-1/2 hover:outline-1 hover:outline-yellow-chupa"
-          > */}
           <Image
             style={{
               textShadow: " 6px 6px 4px 0px #FFF20066",
@@ -133,7 +163,6 @@ const Quiz = () => {
             alt=" start-fontbolt logo"
             priority={true}
           />
-          {/* </div> */}
         </motion.div>
       )}
 
@@ -145,10 +174,6 @@ const Quiz = () => {
             transition={{ duration: 1, delay: 0.5 }}
             className="flex flex-col gap-3.5  w-4/5 md:w-auto"
           >
-            {/* <div
-              className="flex flex-col
-        gap-3.5  w-9/10 md:w-auto"
-            > */}
             <h2
               style={{
                 boxShadow: "2.27px 2.27px 3.02px 0px #FFF20066",
@@ -162,8 +187,8 @@ const Quiz = () => {
               {cardsArray.map((card) => (
                 <section
                   key={card.id}
-                  onClick={() => setOptionSelected(card.id)}
-                  className={`bg-chupa-500 px-3.25 py-2.5 flex  justify-center items-center  rounded-2xl transition-all duration-200 hover:outline-2 hover:outline-yellow-chupa shadow-[0px_1.97px_3.93px_0px_#00000040] hover:shadow-[0px_1.97px_3.93px_0px_#FFF20080] relative
+                  onClick={() => handleOptionSelect(card.id)}
+                  className={`bg-chupa-500 px-3.25 py-2.5 flex  justify-center items-center  rounded-2xl transition-all duration-200 hover:outline-2 hover:outline-yellow-chupa shadow-[0px_1.97px_3.93px_0px_#00000040] hover:shadow-[0px_1.97px_3.93px_0px_#FFF20080] relative cursor-pointer
                 ${
                   optionSelected === card.id
                     ? "outline-2 outline-yellow-chupa"
@@ -190,23 +215,25 @@ const Quiz = () => {
                 </section>
               ))}
             </div>
-            {/* </div> */}
           </motion.div>
 
           <motion.div
             initial={{ y: "100vh" }}
             animate={{ y: 0 }}
             transition={{ type: "spring", stiffness: 30 }}
-            // className="w-32 h-32 bg-blue-500"
           >
             <button
               onClick={() => {
-                trackEvent("click", "Quiz Screen", "Submit Button");
                 playClickSound();
                 handleSubmit();
               }}
-              className="  max-h-16.25 h-12 w-fit self-center  border-b-4 border-b-chupa-500 md:border-transparent bg-yellow-chupa uppercase text-chupa-500 py-3 px-23 rounded-xl 
-          font-bold text-base leading-[100%] tracking-normal transition-all  duration-200 hover:border-b-4 hover:border-b-chupa-500"
+              disabled={!optionSelected}
+              className={`max-h-16.25 h-12 w-fit self-center border-b-4 border-b-chupa-500 md:border-transparent bg-yellow-chupa uppercase text-chupa-500 py-3 px-23 rounded-xl 
+          font-bold text-base leading-[100%] tracking-normal transition-all duration-200 hover:border-b-4 hover:border-b-chupa-500
+          ${
+            !optionSelected ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+          }
+          `}
             >
               SUBMIT
             </button>

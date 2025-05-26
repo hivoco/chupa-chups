@@ -4,7 +4,8 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { playClickSound } from "@/utlis/playClickSound";
-import { trackEvent } from "@/utlis/analytics";
+// import { trackEvent } from "@/utlis/analytics";
+import { trackEvent, trackEventDataLayer } from "@/utlis/analytics";
 
 
 const Login = () => {
@@ -45,7 +46,7 @@ const Login = () => {
     if (!isValidData(data)) {
       return;
     }
-    trackEvent("click", "FPD screen", "Login Button");
+    trackEventDataLayer("click", "FPD screen", "Login Button");
 
 
     const END_POINT = "https://api.chupachups.in";

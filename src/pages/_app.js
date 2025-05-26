@@ -1,7 +1,6 @@
 import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 import Head from "next/head";
-import { useEffect } from "react";
 import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Inter({
@@ -10,17 +9,6 @@ const inter = Inter({
 });
 
 export default function App({ Component, pageProps }) {
-  useEffect(() => {
-    // Ensure gtag is available globally for event tracking
-    if (typeof window !== "undefined") {
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      window.gtag = gtag;
-    }
-  }, []);
-
   return (
     <>
       <Head>
