@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { playClickSound } from "@/utlis/playClickSound";
-import { trackEvent, trackEventDataLayer } from "@/utlis/analytics";
+import * as gtag from "@/utlis/analytics";
 
 const Login = () => {
   const router = useRouter();
@@ -43,38 +43,11 @@ const Login = () => {
       return;
     }
 
-    // Track the event BEFORE making the API call
-    console.log("Tracking login button click event");
-
-    // Try multiple tracking methods
-    try {
-      // Method 1: Using dataLayer directly
-      if (typeof window !== "undefined") {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "custom_button_click",
-          event_action: "click",
-          screen_name: "FPD screen",
-          event_name: "Login Button",
-        });
-        console.log("DataLayer event pushed");
-      }
-
-      // Method 2: Using gtag if available
-      if (typeof window !== "undefined" && window.gtag) {
-        window.gtag("event", "click", {
-          screen_name: "FPD screen",
-          event_name: "Login Button",
-        });
-        console.log("gtag event sent");
-      }
-
-      // Method 3: Using utility functions
-      trackEventDataLayer("click", "FPD screen", "Login Button");
-      trackEvent("click", "FPD screen", "Login Button");
-    } catch (error) {
-      console.error("Error tracking event:", error);
-    }
+    gtag.event({
+      action: "Login Button",
+      category: "Button Click",
+      label: "User clicked login button",
+    });
 
     const END_POINT = "https://api.chupachups.in";
 
@@ -88,29 +61,12 @@ const Login = () => {
       const result = await res.json();
 
       if (result.message) {
-        // Track successful login
-        if (typeof window !== "undefined") {
-          window.dataLayer = window.dataLayer || [];
-          window.dataLayer.push({
-            event: "login_success",
-            screen_name: "FPD screen",
-            event_name: "Login Success",
-          });
-        }
         router.push("/quiz");
       }
       console.log(result);
     } catch (err) {
       console.error("Error:", err);
-      // Track login error
-      if (typeof window !== "undefined") {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: "login_error",
-          screen_name: "FPD screen",
-          event_name: "Login Error",
-        });
-      }
+    
     }
   }
 
@@ -119,19 +75,7 @@ const Login = () => {
     sessionStorage.setItem("user_email", userDetails.user_email);
   }, [userDetails.user_email]);
 
-  // Debug: Check if gtag is available after component mounts
-  useEffect(() => {
-    const checkGtag = () => {
-      console.log("Window gtag available:", typeof window.gtag);
-      console.log("DataLayer:", window.dataLayer);
-    };
-
-    // Check immediately
-    checkGtag();
-
-    // Check after a delay (in case gtag loads later)
-    setTimeout(checkGtag, 2000);
-  }, []);
+  
 
   return (
     <div className=" grid overflow-hidden h-svh max-w-4xl md:h-screen w-4/5 md:w-full md:justify-center   md:items-stretch items-center  gap-12.5 py-11 mx-auto">

@@ -5,7 +5,7 @@ import Login from "./login";
 import Result from "@/components/result";
 import { motion } from "framer-motion";
 import { playClickSound } from "@/utlis/playClickSound";
-import { trackEvent, trackEventDataLayer } from "@/utlis/analytics";
+import * as gtag from "@/utlis/analytics";
 
 const Quiz = () => {
   const [optionSelected, setOptionSelected] = useState("");
@@ -34,17 +34,11 @@ const Quiz = () => {
       return;
     }
 
-    // Track the submit event BEFORE making API call
-    console.log("Tracking submit button click");
-    trackEventDataLayer("click", "Quiz Screen", "Submit Button");
-    trackEvent("click", "Quiz Screen", "Submit Button");
-
-    // Also track which option was selected
-    trackEventDataLayer(
-      "quiz_answer",
-      "Quiz Screen",
-      `Option ${optionSelected} Selected`
-    );
+    gtag.event({
+      action: "Submit Button",
+      category: "Button Click",
+      label: "User clicked submit button",
+    });
 
     sendData(data);
   };
@@ -62,26 +56,22 @@ const Quiz = () => {
       if (result.message) {
         setSubmitClicked(true);
         // Track successful quiz submission
-        trackEventDataLayer("success", "Quiz Screen", "Quiz Submit Success");
-        trackEventDataLayer(
-          "quiz_result",
-          "Quiz Screen",
-          data.is_correct ? "Correct Answer" : "Wrong Answer"
-        );
+      
       }
       console.log(result);
     } catch (err) {
       console.error("Error:", err);
       // Track submission error
-      trackEventDataLayer("error", "Quiz Screen", "Quiz Submit Error");
+      
     }
   }
 
   const handleStartClick = () => {
-    console.log("Tracking start button click");
-    // Track start button event with both methods
-    trackEventDataLayer("click", "Game Start Screen", "Start Button");
-    trackEvent("click", "Game Start Screen", "Start Button");
+    gtag.event({
+      action: "Start Button",
+      category: "Button Click",
+      label: "User clicked start button",
+    });
 
     playClickSound();
     setStartClicked(true);
@@ -90,13 +80,8 @@ const Quiz = () => {
   const handleOptionSelect = (cardId) => {
     setOptionSelected(cardId);
 
-    // Track option selection
-    console.log("Tracking option selection:", cardId);
-    trackEventDataLayer(
-      "quiz_option_select",
-      "Quiz Screen",
-      `Option ${cardId} Selected`
-    );
+  
+    
   };
 
   useEffect(() => {
