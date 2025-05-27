@@ -1,11 +1,11 @@
 "use client";
+
 import { Check, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { playClickSound } from "@/utlis/playClickSound";
-// import { trackEvent } from "@/utlis/analytics";
 import { trackEvent, trackEventDataLayer } from "@/utlis/analytics";
 
 const Login = () => {
@@ -17,14 +17,9 @@ const Login = () => {
     is_accepted: false,
   });
 
-  // console.log(userDetails, "userDetails");
-
   function isValidEmail(email) {
-    // return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    // RFC 5322 compliant regex pattern for email validation
     const pattern =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
     console.log(pattern.test(email), "mail check");
     return pattern.test(email);
   }
@@ -44,15 +39,44 @@ const Login = () => {
 
   async function sendData(data) {
     if (!isValidData(data)) {
+      console.log("Invalid data - not tracking event");
       return;
     }
-    trackEventDataLayer("click", "FPD screen", "Login Button");
+
+    // Track the event BEFORE making the API call
+    console.log("Tracking login button click event");
+
+    // Try multiple tracking methods
+    try {
+      // Method 1: Using dataLayer directly
+      if (typeof window !== "undefined") {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "custom_button_click",
+          event_action: "click",
+          screen_name: "FPD screen",
+          event_name: "Login Button",
+        });
+        console.log("DataLayer event pushed");
+      }
+
+      // Method 2: Using gtag if available
+      if (typeof window !== "undefined" && window.gtag) {
+        window.gtag("event", "click", {
+          screen_name: "FPD screen",
+          event_name: "Login Button",
+        });
+        console.log("gtag event sent");
+      }
+
+      // Method 3: Using utility functions
+      trackEventDataLayer("click", "FPD screen", "Login Button");
+      trackEvent("click", "FPD screen", "Login Button");
+    } catch (error) {
+      console.error("Error tracking event:", error);
+    }
 
     const END_POINT = "https://api.chupachups.in";
-    if (!isValidData(data)) {
-      console.log("Invalid data");
-      return;
-    }
 
     try {
       const res = await fetch(`${END_POINT}/api/insert_data`, {
@@ -64,11 +88,29 @@ const Login = () => {
       const result = await res.json();
 
       if (result.message) {
+        // Track successful login
+        if (typeof window !== "undefined") {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({
+            event: "login_success",
+            screen_name: "FPD screen",
+            event_name: "Login Success",
+          });
+        }
         router.push("/quiz");
       }
       console.log(result);
     } catch (err) {
       console.error("Error:", err);
+      // Track login error
+      if (typeof window !== "undefined") {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: "login_error",
+          screen_name: "FPD screen",
+          event_name: "Login Error",
+        });
+      }
     }
   }
 
@@ -77,11 +119,22 @@ const Login = () => {
     sessionStorage.setItem("user_email", userDetails.user_email);
   }, [userDetails.user_email]);
 
-  return (
-    // flex-col items-center
-    <div className=" grid overflow-hidden h-svh max-w-4xl md:h-screen w-4/5 md:w-full md:justify-center   md:items-stretch items-center  gap-12.5 py-11 mx-auto">
-      {/* <div className="grid flex-col gap-7 items-center   "> */}
+  // Debug: Check if gtag is available after component mounts
+  useEffect(() => {
+    const checkGtag = () => {
+      console.log("Window gtag available:", typeof window.gtag);
+      console.log("DataLayer:", window.dataLayer);
+    };
 
+    // Check immediately
+    checkGtag();
+
+    // Check after a delay (in case gtag loads later)
+    setTimeout(checkGtag, 2000);
+  }, []);
+
+  return (
+    <div className=" grid overflow-hidden h-svh max-w-4xl md:h-screen w-4/5 md:w-full md:justify-center   md:items-stretch items-center  gap-12.5 py-11 mx-auto">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -183,8 +236,6 @@ const Login = () => {
         </div>
       </motion.div>
 
-      {/* </div> */}
-
       <motion.div
         initial={{ y: "100vh" }}
         animate={{ y: 0 }}
@@ -213,8 +264,8 @@ const Login = () => {
 
           <button
             onClick={() => {
-              sendData(userDetails);
               playClickSound();
+              sendData(userDetails);
             }}
             className="w-full cursor-pointer max-h-16.25 h-12  border-b-4 border-b-chupa-500 md:border-transparent bg-yellow-chupa uppercase text-chupa-500 py-3 rounded-xl 
           font-bold text-base leading-[100%] tracking-normal transition-all  duration-200 hover:border-b-4 hover:border-b-chupa-500"
