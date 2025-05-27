@@ -1,3 +1,4 @@
+"use client";
 import { Check, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -6,7 +7,6 @@ import { motion } from "framer-motion";
 import { playClickSound } from "@/utlis/playClickSound";
 // import { trackEvent } from "@/utlis/analytics";
 import { trackEvent, trackEventDataLayer } from "@/utlis/analytics";
-
 
 const Login = () => {
   const router = useRouter();
@@ -47,7 +47,6 @@ const Login = () => {
       return;
     }
     trackEventDataLayer("click", "FPD screen", "Login Button");
-
 
     const END_POINT = "https://api.chupachups.in";
     if (!isValidData(data)) {

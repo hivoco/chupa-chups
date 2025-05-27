@@ -1,4 +1,4 @@
-// utlis/analytics.js
+"use client";
 export const trackEvent = (action, screen_name, event_name) => {
   // Check if we're in the browser and gtag is available
   if (typeof window !== "undefined" && typeof window.gtag === "function") {
