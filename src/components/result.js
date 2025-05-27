@@ -10,7 +10,7 @@ const audioRef = useRef(null);
   const rewardMessages = {
     correct: {
       title: "Great!",
-      message: "You get a chance to win Chupa Chups goodies.",
+      message: "You get a chance to win goodies.",
     },
     incorrect: {
       title: "Oops!",
