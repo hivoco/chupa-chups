@@ -6,12 +6,15 @@ import Result from "@/components/result";
 import { motion } from "framer-motion";
 import { playClickSound } from "@/utlis/playClickSound";
 import * as gtag from "@/utlis/analytics";
+import { useRouter } from "next/router";
 
 const Quiz = () => {
   const [optionSelected, setOptionSelected] = useState("");
   const [startClicked, setStartClicked] = useState(false);
   const [submitClicked, setSubmitClicked] = useState(false);
   const [data, setData] = useState();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
 
   const cardsArray = [
     {
@@ -56,13 +59,11 @@ const Quiz = () => {
       if (result.message) {
         setSubmitClicked(true);
         // Track successful quiz submission
-      
       }
       console.log(result);
     } catch (err) {
       console.error("Error:", err);
       // Track submission error
-      
     }
   }
 
@@ -79,27 +80,35 @@ const Quiz = () => {
 
   const handleOptionSelect = (cardId) => {
     setOptionSelected(cardId);
-
-  
-    
   };
 
   useEffect(() => {
     const mail = sessionStorage.getItem("user_email");
-    if (!mail) return;
+    // if (!mail) return
+    if (!mail) {
+      setIsLoggedIn(false);
+      router.replace("/login");
+      return;
+    }
+
+    setIsLoggedIn(true);
+
     if (optionSelected) {
       setData({
         user_email: mail,
-        is_correct: optionSelected === "B",
+        is_correct: optionSelected === "A",
       });
     }
   }, [optionSelected]);
 
+  if (!isLoggedIn) {
+    return null;
+  }
   return (
     <div
       className=" py-11 h-svh overflow-hidden  md:h-screen max-w-4xl  mx-auto
-    flex flex-col 
-    items-center justify-between relative
+      flex flex-col 
+      items-center justify-between relative
     "
     >
       <Image
@@ -169,8 +178,8 @@ const Quiz = () => {
               Which style of Chupa Chups fun drop did you spot on the stream?{" "}
             </h2>
 
-            <div className="grid grid-cols-2 [2] md:grid-cols-3 fle flexwrap w-full  md:mx-auto gap-3 gap-y-2  md:gap-4.5  justify-between md:justify-between items-center ">
-              {cardsArray.map((card) => (
+            <div className="grid grid-cols-2 [2] md:grid-cols-3 items-stretch fle flexwrap w-full  md:mx-auto gap-3 gap-y-2  md:gap-4.5  justify-between md:justify-between items-center ">
+              {cardsArray.map((card,index) => (
                 <section
                   key={card.id}
                   onClick={() => handleOptionSelect(card.id)}
@@ -191,9 +200,9 @@ const Quiz = () => {
                     {card.id}.
                   </span>
                   <Image
-                    className=" md:w-30 md:h-44 2xl:w-44 2xl:h-60"
+                    className={`md:w-36 2xl:w-50 ${index === 2 ? "h-full w-auto object-contain:" : "h-auto"}`}
                     src={card.src}
-                    width={95}
+                    width={index===2 ?140: 95}
                     height={140}
                     alt="Picture of fun drop"
                     priority={true}

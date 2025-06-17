@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion"; 
+import { motion } from "framer-motion";
 
-const Result = ({optionSelected}) => {
-//   const [isCorrect, setIsCorrect] = useState(optionSelected === "B");
-const audioRef = useRef(null);
+const Result = ({ optionSelected }) => {
+  //   const [isCorrect, setIsCorrect] = useState(optionSelected === "B");
+  const audioRef = useRef(null);
 
   const rewardMessages = {
     correct: {
@@ -54,7 +54,7 @@ const audioRef = useRef(null);
           {optionSelected}.
         </span>
         <Image
-          className=" md:w-37.5 md:h-55  2xl:w-60 2xl:h-85"
+          className="h-auto md:w-45 2xl:w-60"
           //   src={card.src}
           src={`/images/${optionSelected}.png`}
           width={220}
@@ -80,7 +80,7 @@ const audioRef = useRef(null);
         > */}
         <span className="text-2xl font-semibold ">
           {
-            rewardMessages[optionSelected === "B" ? "correct" : "incorrect"]
+            rewardMessages[optionSelected === "A" ? "correct" : "incorrect"]
               .title
           }
           {/* Great! */}
@@ -88,12 +88,12 @@ const audioRef = useRef(null);
 
         <h2 className="text-base ">
           {
-            rewardMessages[optionSelected === "B" ? "correct" : "incorrect"]
+            rewardMessages[optionSelected === "A" ? "correct" : "incorrect"]
               .message
           }
         </h2>
 
-        {optionSelected === "B" && (
+        {optionSelected === "A" && (
           <>
             <Image
               className="w-auto  bottom-5 md:bottom-0 right-0 z-10 object-cover absolute pointer-events-none"
@@ -118,10 +118,10 @@ const audioRef = useRef(null);
 
         {optionSelected && (
           <audio
-          ref={audioRef}
+            ref={audioRef}
             type="audio/mpeg"
             src={
-              optionSelected === "B"
+              optionSelected === "A"
                 ? "/audio/rightAnswer.mp3"
                 : "/audio/wrongAnswer.mp3"
             }
