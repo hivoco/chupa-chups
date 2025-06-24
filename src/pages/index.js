@@ -30,7 +30,9 @@ const Home = () => {
 
     const timer2 = setTimeout(() => {
       router.push("/login");
-    }, 3500);
+    // }, 3500);
+  }, 2500);
+
 
     return () =>{
        clearTimeout(timer1)
@@ -43,14 +45,14 @@ const Home = () => {
       <AnimatePresence >
         {isVisible && (
           <motion.div
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{
-              duration: 1,
-              ease: "easeInOut",
-              exit: { duration: 1 },
-            }}
+            // initial={{ opacity: 0,  }}
+            // animate={{ opacity: 1}}
+            // exit={{ opacity: 0 }}
+            // transition={{
+            //   duration: 1,
+            //   ease: "easeInOut",
+            //   exit: { duration: 1 },
+            // }}
             className="self-center"
           >
             <Image

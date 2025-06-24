@@ -64,9 +64,9 @@ const Result = ({ optionSelected }) => {
         />
       </section>
       <motion.div
-        initial={{ y: "100vh" }}
-        animate={{ y: 0 }}
-        transition={{ type: "spring", stiffness: 40 }}
+        // initial={{ y: "100vh" }}
+        // animate={{ y: 0 }}
+        // transition={{ type: "spring", stiffness: 40 }}
         style={{
           boxShadow: " 0px 2.38px 4.76px 0px #00000040",
         }}

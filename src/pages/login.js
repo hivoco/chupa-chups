@@ -13,7 +13,9 @@ const Login = () => {
   const [showFirst, setShowFirst] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowFirst(false),5000);
+    // const timer = setTimeout(() => setShowFirst(false), 5000);
+
+    const timer = setTimeout(() => setShowFirst(false), 1500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -49,6 +51,7 @@ const Login = () => {
       console.log("Invalid data - not tracking event");
       return;
     }
+    playClickSound();
 
     gtag.event({
       action: "Login Button",
@@ -88,7 +91,7 @@ const Login = () => {
       ${
         !showFirst
           ? "md:items-stretch items-center  gap-12.5   py-11"
-          : " md:place-items-center gap-5 2xl:gap-0 py-11  pb-0 "
+          : "items-start md:place-items-center gap5 gap-0 md:gap-5 2xl:gap-0 py-11"
       }
       `}
     >
@@ -97,15 +100,16 @@ const Login = () => {
       {/* <div className=" grid overflow-hidden h-svh max-w-4xl md:h-screen w-4/5 md:w-full md:justify-center   md:place-items-center gap-5 2xl:gap-0 py-11 pb-0 mx-auto"> */}
 
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5 }}
+      className="self-start"
+      // initial={{ opacity: 0 }}
+      // animate={{ opacity: 1 }}
+      // transition={{ duration: 1.5 }}
       >
         <Image
           style={{
             textShadow: "6px 6px 4px 0px #FFF20066",
           }}
-          className="mx-auto 2xl:w-45 2xl:h-45"
+          className="mx-auto 2xl:w-45 2xl:h-45 "
           src="/images/Chupa-Chups.png"
           width={120}
           height={120}
@@ -117,8 +121,8 @@ const Login = () => {
       <AnimatePresence mode="wait">
         {showFirst ? (
           <>
-            {/* <div className="text-center flex flex-col gap-4 justify-center"> */}
-            <motion.div
+            <div className=" flex flex-col gap-4 justify-center items-center">
+              {/* <motion.div
               className="text-center flex flex-col gap-4 justify-center"
               initial={{ y: "30vh", opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -129,13 +133,13 @@ const Login = () => {
                 delay: 1,
               }}
               exit={{ opacity: 0 }} // smooth unmount
-            >
+            > */}
               <Image
                 src="/images/fun-supplies-text.png"
                 alt="Fun Supplies Incoming"
                 width={432}
                 height={120}
-                className="mx-auto h-[80px] w-auto 2xl:h-30"
+                className="mx-auto h-[80px] w-auto 2xl:h-25 2xl:h30"
               />
 
               <Image
@@ -143,48 +147,59 @@ const Login = () => {
                 alt="Scan to Play and Win"
                 width={320}
                 height={120}
-                className="mx-auto h-[80px] w-auto 2xl:h-30"
+                className="mx-auto h-[80px] w-auto 2xl:h-25 2xl:h30"
                 priority={true}
               />
-            </motion.div>
-            {/* </div> */}
 
-            <div className=" bottom-0 z-50 flex items-start md:items-center justify-center ">
-              <motion.div
-                className=""
-                initial={{ y: "30vh", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 20,
-                  duration: 3,
-                  delay: 1,
-                }}
-              >
-                <Image
-                  className="w-screen h-auto md:h-44 2xl:h-66 md:w-auto bg-transparent"
-                  // src="/images/gifts.png"
-                  src="/images/y.png"
-                  alt="Headset and consoles gift"
-                  width={690}
-                  height={263}
-                  priority={true}
-                />
-              </motion.div>
+              <Image
+                className="w-[90%] mx-auto h-auto md:h-37 2xl:h-45 2xl:h56 md:w-auto bg-transparent"
+                // src="/images/gifts.png"
+                src={"/images/Frame 14.png"}
+                alt="Headset and consoles gift"
+                width={652}
+                height={224}
+                priority={true}
+              />
+
+              {/* </motion.div> */}
             </div>
+
+            {/* <div className=" bottom-0 z-50 flex items-start md:items-center justify-center ">
+              <motion.div
+                className="" */}
+            {/* // initial={{ y: "30vh", opacity: 0 }}
+                // animate={{ y: 0, opacity: 1 }}
+                // exit={{ opacity: 0 }}
+                // transition={{
+                //   type: "spring",
+                //   stiffness: 20,
+                //   duration: 3,
+                //   delay: 1,
+                // }}
+              > */}
+            {/* <Image
+                  className="w-[90%] mx-auto h-auto md:h-37 2xl:h-56 md:w-auto bg-transparent"
+                  // src="/images/gifts.png"
+                  src={"/images/Frame 14.png"}
+                  alt="Headset and consoles gift"
+                  width={652}
+                  height={224}
+                  priority={true}
+                /> */}
+            {/* </motion.div>
+            </div> */}
           </>
         ) : (
           <>
             <motion.div
-              initial={{ y: "30vh", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{
-                type: "spring",
-                stiffness: 20,
-                duration: 3,
-                delay: 1,
-              }}
+            // initial={{ y: "30vh", opacity: 0 }}
+            // animate={{ y: 0, opacity: 1 }}
+            // transition={{
+            //   type: "spring",
+            //   stiffness: 20,
+            //   duration: 3,
+            //   delay: 1,
+            // }}
             >
               <div className="w-4/5 mx-auto md:w-full md:m-0  relative z-10 flex flex-col gap-3 font-normal text-sm leading-[100%] tracking-normal">
                 <div className="w-full ">
@@ -265,14 +280,14 @@ const Login = () => {
             </motion.div>
 
             <motion.div
-              initial={{ y: "100vh" }}
-              animate={{ y: 0 }}
-              transition={{
-                type: "spring",
-                stiffness: 20,
-                duration: 1,
-                delay: 1.5,
-              }}
+            // initial={{ y: "100vh" }}
+            // animate={{ y: 0 }}
+            // transition={{
+            //   type: "spring",
+            //   stiffness: 20,
+            //   duration: 1,
+            //   delay: 1.5,
+            // }}
             >
               <div className="grid gap-7  min-w-68  w-4/5 mx-auto md:w-full md:m-0 ">
                 <div
@@ -297,7 +312,6 @@ const Login = () => {
 
                 <button
                   onClick={() => {
-                    playClickSound();
                     sendData(userDetails);
                   }}
                   className="w-full cursor-pointer max-h-16.25 h-12  border-b-4 border-b-chupa-500 md:border-transparent bg-yellow-chupa uppercase text-chupa-500 py-3 rounded-xl 

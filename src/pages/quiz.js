@@ -131,23 +131,24 @@ const Quiz = () => {
           onClick={handleStartClick}
           className=" bg-chupa-500 rounded-full h-50 w-50  md:h-45 md:w-45 flex justify-center items-center absolute left-1/2 -translate-x-1/2  top-1/2 
         -translate-y-1/2 hover:outline-1 hover:outline-yellow-chupa cursor-pointer"
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{
-            duration: 1.5,
-            delay: 0.5,
-            scale: {
-              type: "spring",
-              damping: 5,
-              stiffness: 100,
-              restDelta: 0.001,
-              times: [0, 0.2, 0.4, 0.6, 0.8],
-              keyframes: [0.2, 1],
-            },
-            opacity: { duration: 0.8 },
-          }}
+          // initial={{ opacity: 0, scale: 0.5 }}
+          // animate={{ opacity: 1, scale: 1 }}
+          // transition={{
+          //   duration: 1.5,
+          //   delay: 0.5,
+          //   scale: {
+          //     type: "spring",
+          //     damping: 5,
+          //     stiffness: 100,
+          //     restDelta: 0.001,
+          //     times: [0, 0.2, 0.4, 0.6, 0.8],
+          //     keyframes: [0.2, 1],
+          //   },
+          //   opacity: { duration: 0.8 },
+          // }}
         >
           <Image
+            onClick={handleStartClick}
             style={{
               textShadow: " 6px 6px 4px 0px #FFF20066",
             }}
@@ -164,9 +165,9 @@ const Quiz = () => {
       {startClicked && !submitClicked && (
         <>
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
+            // initial={{ opacity: 0 }}
+            // animate={{ opacity: 1 }}
+            // transition={{ duration: 1, delay: 0.5 }}
             className="flex flex-col gap-3.5  w-4/5 md:w-auto"
           >
             <h2
@@ -179,7 +180,7 @@ const Quiz = () => {
             </h2>
 
             <div className="grid grid-cols-2 [2] md:grid-cols-3 items-stretch fle flexwrap w-full  md:mx-auto gap-3 gap-y-2  md:gap-4.5  justify-between md:justify-between items-center ">
-              {cardsArray.map((card,index) => (
+              {cardsArray.map((card, index) => (
                 <section
                   key={card.id}
                   onClick={() => handleOptionSelect(card.id)}
@@ -200,9 +201,11 @@ const Quiz = () => {
                     {card.id}.
                   </span>
                   <Image
-                    className={`md:w-36 2xl:w-50 ${index === 2 ? "h-full w-auto object-contain:" : "h-auto"}`}
+                    className={`md:w-36 2xl:w-50 ${
+                      index === 2 ? "h-full w-auto object-contain:" : "h-auto"
+                    }`}
                     src={card.src}
-                    width={index===2 ?140: 95}
+                    width={index === 2 ? 140 : 95}
                     height={140}
                     alt="Picture of fun drop"
                     priority={true}
@@ -213,9 +216,9 @@ const Quiz = () => {
           </motion.div>
 
           <motion.div
-            initial={{ y: "100vh" }}
-            animate={{ y: 0 }}
-            transition={{ type: "spring", stiffness: 30 }}
+            // initial={{ y: "100vh" }}
+            // animate={{ y: 0 }}
+            // transition={{ type: "spring", stiffness: 30 }}
           >
             <button
               onClick={() => {
