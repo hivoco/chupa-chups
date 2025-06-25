@@ -23,11 +23,13 @@ const Home = () => {
   const router = useRouter();
 
   useEffect(() => {
-    setIsVisible(true);
-    const timer1 = setTimeout(() => {
-      setIsVisible(false);
-      router.push("/login");
-    }, 0);
+    router.push("/login");
+
+    // setIsVisible(true);
+    // const timer1 = setTimeout(() => {
+    //   setIsVisible(false);
+    //   router.push("/login");
+    // }, 0);
 
     //   const timer2 = setTimeout(() => {
     //     router.push("/login");
@@ -35,7 +37,7 @@ const Home = () => {
     // }, 1500);
 
     return () => {
-      clearTimeout(timer1);
+      // clearTimeout(timer1);
       // clearTimeout(timer2);
     };
   }, []);
