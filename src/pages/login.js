@@ -14,8 +14,9 @@ const Login = () => {
 
   useEffect(() => {
     // const timer = setTimeout(() => setShowFirst(false), 5000);
+    //1500 to 500
 
-    const timer = setTimeout(() => setShowFirst(false), 1500);
+    const timer = setTimeout(() => setShowFirst(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 

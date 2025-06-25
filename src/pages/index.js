@@ -13,7 +13,7 @@
 // className={`${geistSans.className} ${geistMono.className} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
 
 import Image from "next/image";
-import { motion,AnimatePresence  } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -21,28 +21,28 @@ import { useRouter } from "next/router";
 const Home = () => {
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
-  
+
   useEffect(() => {
     setIsVisible(true);
     const timer1 = setTimeout(() => {
       setIsVisible(false);
-    }, 2000);
-
-    const timer2 = setTimeout(() => {
       router.push("/login");
-    // }, 3500);
-  }, 2500);
+    }, 0);
 
+    //   const timer2 = setTimeout(() => {
+    //     router.push("/login");
+    //   // }, 3500);
+    // }, 1500);
 
-    return () =>{
-       clearTimeout(timer1)
-       clearTimeout(timer2)
-    }
+    return () => {
+      clearTimeout(timer1);
+      // clearTimeout(timer2);
+    };
   }, []);
 
   return (
     <div className="h-svh md:min-h-screen  max-w-4xl mx-auto flex flex-col gap-4 justify-center py-16 ">
-      <AnimatePresence >
+      <AnimatePresence>
         {isVisible && (
           <motion.div
             // initial={{ opacity: 0,  }}
